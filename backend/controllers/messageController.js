@@ -109,7 +109,8 @@ exports.sendMessage = async (req, res) => {
     // Validate study material sharing
     let studyMaterial = null;
     if (studyMaterialId) {
-      const mat = await StudyMaterial.findById(studyMaterialId);
+      const matId = new mongoose.Types.ObjectId(studyMaterialId);
+      const mat = await StudyMaterial.findById(matId);
       if (!mat) {
         return res.status(404).json({ message: "Study material not found" });
       }

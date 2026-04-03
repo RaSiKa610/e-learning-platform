@@ -76,7 +76,7 @@ exports.generateTimetable = async (req, res) => {
       const day = new Date(today);
       day.setDate(today.getDate() + dayOffset);
 
-      // Skip Sundays for rest (improves consistency for most learners)
+      // Skip Sundays as a default weekly rest day to improve long-term retention
       if (day.getDay() !== 0) {
         const dayLessons = [];
         for (let i = 0; i < lessonsPerDay && lessonsScheduled < remainingLessons; i++) {

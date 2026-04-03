@@ -94,7 +94,7 @@ export default function CourseTimetable() {
           {loading && (
             <div className="text-center py-10">
               <div className="spinner spinner-lg mx-auto mb-3"></div>
-              <p style={{ color: "var(--color-text-muted)" }}>Generating your personalised timetable…</p>
+              <p style={{ color: "var(--color-text-muted)" }}>Generating your personalized timetable…</p>
             </div>
           )}
 

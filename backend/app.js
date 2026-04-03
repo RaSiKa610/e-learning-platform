@@ -14,10 +14,11 @@ const timetableRoutes = require("./routes/timetableRoutes");
 
 const app = express();
 
-// General API rate limiter: 200 requests per 15 minutes per IP
+// General API rate limiter: 500 requests per 15 minutes per IP
+// (covers chat polling at 5s intervals plus regular navigation)
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 200,
+  max: 500,
   standardHeaders: true,
   legacyHeaders: false,
   message: { message: "Too many requests, please try again later." }
