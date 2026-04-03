@@ -1,9 +1,15 @@
 const Enrollment = require("../models/Enrollment");
 const Course = require("../models/Course");
+const Notification = require("../models/Notification");
+const mongoose = require("mongoose");
 
 // POST /api/enroll
 exports.enrollInCourse = async (req, res) => {
   const { courseId } = req.body;
+
+  if (!courseId || !mongoose.Types.ObjectId.isValid(courseId)) {
+    return res.status(400).json({ message: "Invalid courseId" });
+  }
 
   const alreadyEnrolled = await Enrollment.findOne({
     userId: req.user._id,
@@ -14,9 +20,19 @@ exports.enrollInCourse = async (req, res) => {
     return res.status(400).json({ message: "Already enrolled" });
   }
 
+  const course = await Course.findById(courseId).select("title");
+
   const enrollment = await Enrollment.create({
     userId: req.user._id,
     courseId
+  });
+
+  // Create enrollment notification for the user
+  await Notification.create({
+    user: req.user._id,
+    type: "enrolled",
+    message: `You have successfully enrolled in "${course ? course.title : "a course"}"`,
+    relatedCourse: courseId
   });
 
   res.status(201).json(enrollment);
@@ -54,4 +70,35 @@ exports.updateProgress = async (req, res) => {
 
   await enrollment.save();
   res.json(enrollment);
+};
+
+// DELETE /api/enrollments/:id/unenroll
+exports.unenrollFromCourse = async (req, res) => {
+  try {
+    const enrollment = await Enrollment.findById(req.params.id).populate("courseId", "title");
+
+    if (!enrollment) {
+      return res.status(404).json({ message: "Enrollment not found" });
+    }
+
+    if (enrollment.userId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    const courseTitle = enrollment.courseId ? enrollment.courseId.title : "a course";
+
+    await Enrollment.findByIdAndDelete(req.params.id);
+
+    // Create unenrollment notification
+    await Notification.create({
+      user: req.user._id,
+      type: "unenrolled",
+      message: `You have unenrolled from "${courseTitle}"`,
+      relatedCourse: enrollment.courseId ? enrollment.courseId._id : null
+    });
+
+    res.json({ message: "Unenrolled successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };

@@ -8,6 +8,7 @@ export default function Navbar() {
   const [user, setUser] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const [isDark, setIsDark] = useState(() => {
     const saved = localStorage.getItem("theme");
     if (saved) return saved === "dark";
@@ -28,6 +29,19 @@ export default function Navbar() {
     if (token) {
       api.get("/auth/me").then((res) => setUser(res.data)).catch(() => setUser(null));
     }
+  }, [token]);
+
+  // Poll for unread notification count
+  useEffect(() => {
+    if (!token) return;
+    const fetchCount = () => {
+      api.get("/notifications/unread-count")
+        .then((res) => setUnreadCount(res.data.count))
+        .catch(() => {});
+    };
+    fetchCount();
+    const interval = setInterval(fetchCount, 30000);
+    return () => clearInterval(interval);
   }, [token]);
 
   useEffect(() => {
@@ -90,6 +104,8 @@ export default function Navbar() {
             <>
               <Link to="/" className="nav-link">Explore</Link>
               <Link to="/dashboard" className="nav-link">Dashboard</Link>
+              <Link to="/people" className="nav-link">People</Link>
+              <Link to="/chat" className="nav-link">💬 Chat</Link>
               {user?.role === "admin" && (
                 <Link
                   to="/admin"
@@ -104,6 +120,21 @@ export default function Navbar() {
                   {user.name}
                 </span>
               )}
+              {/* Notification bell */}
+              <Link to="/notifications" className="relative p-2 rounded-base transition-all"
+                style={{ color: "var(--color-text-muted)" }}
+                aria-label="Notifications">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round"
+                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+                {unreadCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full text-white text-xs flex items-center justify-center font-bold"
+                    style={{ background: "var(--color-danger)", fontSize: "0.6rem" }}>
+                    {unreadCount > 9 ? "9+" : unreadCount}
+                  </span>
+                )}
+              </Link>
               <button onClick={handleLogout} className="btn btn-danger text-sm px-4 py-2">
                 Logout
               </button>
@@ -153,6 +184,17 @@ export default function Navbar() {
             <>
               <Link to="/" onClick={() => setMenuOpen(false)} className="mobile-nav-link">Explore</Link>
               <Link to="/dashboard" onClick={() => setMenuOpen(false)} className="mobile-nav-link">Dashboard</Link>
+              <Link to="/people" onClick={() => setMenuOpen(false)} className="mobile-nav-link">👥 People</Link>
+              <Link to="/chat" onClick={() => setMenuOpen(false)} className="mobile-nav-link">💬 Chat</Link>
+              <Link to="/notifications" onClick={() => setMenuOpen(false)} className="mobile-nav-link flex items-center justify-between">
+                <span>🔔 Notifications</span>
+                {unreadCount > 0 && (
+                  <span className="px-1.5 py-0.5 rounded-full text-white text-xs font-bold"
+                    style={{ background: "var(--color-danger)", fontSize: "0.6rem" }}>
+                    {unreadCount}
+                  </span>
+                )}
+              </Link>
               {user?.role === "admin" && (
                 <Link to="/admin" onClick={() => setMenuOpen(false)} className="mobile-nav-link">⚙️ Admin</Link>
               )}

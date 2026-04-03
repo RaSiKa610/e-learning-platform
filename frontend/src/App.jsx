@@ -7,6 +7,10 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Dashboard from "./pages/Dashboard";
 import Admin from "./pages/Admin";
+import Chat from "./pages/Chat";
+import Notifications from "./pages/Notifications";
+import People from "./pages/People";
+import CourseTimetable from "./pages/CourseTimetable";
 import PrivateRoute from "./components/PrivateRoute";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -42,6 +46,51 @@ function App() {
               element={
                 <PrivateRoute>
                   <Dashboard />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path="/chat"
+              element={
+                <PrivateRoute>
+                  <Chat />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path="/chat/:userId"
+              element={
+                <PrivateRoute>
+                  <Chat />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path="/notifications"
+              element={
+                <PrivateRoute>
+                  <Notifications />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path="/people"
+              element={
+                <PrivateRoute>
+                  <People />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path="/timetable"
+              element={
+                <PrivateRoute>
+                  <CourseTimetable />
                 </PrivateRoute>
               }
             />

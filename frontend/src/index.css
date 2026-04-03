@@ -448,3 +448,53 @@ button:active, .btn:active { transform: scale(0.97); }
 ::-webkit-scrollbar-track { background: var(--color-bg); }
 ::-webkit-scrollbar-thumb { background: var(--color-border-mid); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--color-text-muted); }
+
+/* ── Screenshot Prevention ── */
+/* Prevent text selection across the entire app */
+body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Allow text selection in form inputs and textareas */
+input, textarea, [contenteditable] {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Disable drag-and-drop of images */
+img {
+  -webkit-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
+}
+
+/* Allow pointer events on interactive images (e.g. image buttons) */
+a img, button img, .interactive-img {
+  pointer-events: auto;
+}
+
+/* Watermark overlay on course content to deter screenshots */
+.protected-content {
+  position: relative;
+}
+.protected-content::after {
+  content: "E-Learning Pro • Protected Content";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: rgba(24, 153, 163, 0.06);
+  pointer-events: none;
+  white-space: nowrap;
+  transform: rotate(-30deg);
+  letter-spacing: 0.05em;
+  z-index: 1000;
+}
