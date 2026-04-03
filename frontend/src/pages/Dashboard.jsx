@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import api from "../api/api";
 import LoginCalendar from "../components/LoginCalendar";
 
@@ -62,6 +63,26 @@ export default function Dashboard() {
                 <p className="text-xs font-medium mt-0.5" style={{ color: "var(--color-text-muted)" }}>{s.label}</p>
               </div>
             </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Quick links */}
+      <div className="px-6 pt-6">
+        <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {[
+            { to: "/timetable", icon: "🤖", label: "AI Timetable", desc: "Personalized schedule" },
+            { to: "/chat",      icon: "💬", label: "Chat",         desc: "Message connections"  },
+            { to: "/people",    icon: "👥", label: "People",       desc: "Follow others"        },
+            { to: "/notifications", icon: "🔔", label: "Notifications", desc: "Alerts & requests" }
+          ].map((q) => (
+            <Link key={q.to} to={q.to}
+              className="card flex flex-col items-center text-center py-4 px-3 rounded-xl group transition-all"
+              style={{ textDecoration: "none" }}>
+              <span className="text-3xl mb-2">{q.icon}</span>
+              <p className="text-sm font-bold" style={{ color: "var(--color-text-dark)" }}>{q.label}</p>
+              <p className="text-xs mt-0.5" style={{ color: "var(--color-text-muted)" }}>{q.desc}</p>
+            </Link>
           ))}
         </div>
       </div>
