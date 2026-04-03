@@ -1,11 +1,16 @@
 const Follow = require("../models/Follow");
 const Notification = require("../models/Notification");
 const User = require("../models/User");
+const mongoose = require("mongoose");
 
 // POST /api/follows/request/:userId  – send a follow request
 exports.sendFollowRequest = async (req, res) => {
   try {
     const followingId = req.params.userId;
+
+    if (!mongoose.Types.ObjectId.isValid(followingId)) {
+      return res.status(400).json({ message: "Invalid userId" });
+    }
 
     if (req.user._id.toString() === followingId) {
       return res.status(400).json({ message: "You cannot follow yourself" });

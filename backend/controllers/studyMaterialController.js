@@ -1,5 +1,6 @@
 const path = require("path");
 const multer = require("multer");
+const mongoose = require("mongoose");
 const StudyMaterial = require("../models/StudyMaterial");
 const Enrollment = require("../models/Enrollment");
 
@@ -50,6 +51,10 @@ exports.getMaterials = async (req, res) => {
       return res.status(400).json({ message: "courseId is required" });
     }
 
+    if (!mongoose.Types.ObjectId.isValid(courseId)) {
+      return res.status(400).json({ message: "Invalid courseId" });
+    }
+
     // If the user is not an admin, check enrollment
     if (req.user.role !== "admin") {
       const enrolled = await Enrollment.findOne({
@@ -72,6 +77,10 @@ exports.getMaterials = async (req, res) => {
 exports.addMaterial = async (req, res) => {
   try {
     const { courseId, title, type, url, fileType } = req.body;
+
+    if (!courseId || !mongoose.Types.ObjectId.isValid(courseId)) {
+      return res.status(400).json({ message: "Invalid courseId" });
+    }
 
     let finalUrl = url;
     let finalFileType = fileType;

@@ -1,10 +1,15 @@
 const Enrollment = require("../models/Enrollment");
 const Course = require("../models/Course");
 const Notification = require("../models/Notification");
+const mongoose = require("mongoose");
 
 // POST /api/enroll
 exports.enrollInCourse = async (req, res) => {
   const { courseId } = req.body;
+
+  if (!courseId || !mongoose.Types.ObjectId.isValid(courseId)) {
+    return res.status(400).json({ message: "Invalid courseId" });
+  }
 
   const alreadyEnrolled = await Enrollment.findOne({
     userId: req.user._id,

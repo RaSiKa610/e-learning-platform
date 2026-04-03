@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../api/api";
+import api, { API_BASE } from "../api/api";
 
 export default function Chat() {
   const { userId } = useParams();
@@ -209,7 +209,7 @@ export default function Chat() {
                           {msg.text && <p className="mb-1">{msg.text}</p>}
                           {msg.imageUrl && (
                             <img
-                              src={`https://e-learning-platform-k1kg.onrender.com${msg.imageUrl}`}
+                              src={`${API_BASE}${msg.imageUrl}`}
                               alt="shared"
                               className="rounded-lg max-w-full mt-1"
                               style={{ maxHeight: "200px" }}
@@ -224,7 +224,7 @@ export default function Chat() {
                                 <a href={msg.studyMaterial.url} target="_blank" rel="noreferrer"
                                   className="underline block mt-0.5 opacity-90">Open link</a>
                               ) : (
-                                <a href={`https://e-learning-platform-k1kg.onrender.com${msg.studyMaterial.url}`}
+                                <a href={`${API_BASE}${msg.studyMaterial.url}`}
                                   target="_blank" rel="noreferrer"
                                   className="underline block mt-0.5 opacity-90">View file</a>
                               )}

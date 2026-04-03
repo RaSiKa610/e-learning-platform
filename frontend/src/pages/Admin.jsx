@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "../api/api";
+import api, { API_BASE } from "../api/api";
 
 const MATERIAL_TYPES = ["document", "image", "video", "youtube", "hyperlink"];
 
@@ -428,7 +428,7 @@ export default function Admin() {
                             {m.type}{m.fileType ? ` · ${m.fileType.toUpperCase()}` : ""}
                           </p>
                         </div>
-                        <a href={["youtube", "hyperlink"].includes(m.type) ? m.url : `https://e-learning-platform-k1kg.onrender.com${m.url}`}
+                        <a href={["youtube", "hyperlink"].includes(m.type) ? m.url : `${API_BASE}${m.url}`}
                           target="_blank" rel="noreferrer"
                           className="text-xs px-2 py-1 rounded"
                           style={{ background: "rgba(24,153,163,0.1)", color: "var(--color-secondary)" }}>

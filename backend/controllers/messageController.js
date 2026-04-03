@@ -4,6 +4,7 @@ const Enrollment = require("../models/Enrollment");
 const StudyMaterial = require("../models/StudyMaterial");
 const multer = require("multer");
 const path = require("path");
+const mongoose = require("mongoose");
 
 // Multer setup for image uploads in chat
 const storage = multer.diskStorage({
@@ -49,6 +50,11 @@ async function areMutualFollows(userAId, userBId) {
 exports.getMessages = async (req, res) => {
   try {
     const otherUserId = req.params.userId;
+
+    if (!mongoose.Types.ObjectId.isValid(otherUserId)) {
+      return res.status(400).json({ message: "Invalid userId" });
+    }
+
     const mutual = await areMutualFollows(req.user._id, otherUserId);
 
     if (!mutual) {
@@ -80,6 +86,15 @@ exports.sendMessage = async (req, res) => {
   try {
     const receiverId = req.params.userId;
     const { text, studyMaterialId } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(receiverId)) {
+      return res.status(400).json({ message: "Invalid userId" });
+    }
+
+    if (studyMaterialId && !mongoose.Types.ObjectId.isValid(studyMaterialId)) {
+      return res.status(400).json({ message: "Invalid studyMaterialId" });
+    }
+
     const mutual = await areMutualFollows(req.user._id, receiverId);
 
     if (!mutual) {
