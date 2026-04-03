@@ -61,61 +61,56 @@ export default function ResetPassword() {
 
   if (error && !verificationToken) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-neutral-50 via-white to-secondary-light/10">
-        <div className="form-container max-w-md w-full text-center">
+      <div className="min-h-screen flex items-center justify-center bg-[var(--color-bg-light)]">
+        <div className="form-container max-w-md w-full text-center animate-scaleIn">
           <div className="text-6xl mb-4">⚠️</div>
           <p className="text-lg text-error mb-4">{error}</p>
-          <p className="text-text-light">Redirecting to password reset request...</p>
+          <p className="text-sm" style={{ color: "var(--color-text-light)" }}>Redirecting to password reset request…</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-neutral-50 via-white to-secondary-light/10 px-4">
-      <div className="form-container max-w-md w-full">
+    <div className="min-h-screen flex items-center justify-center bg-[var(--color-bg-light)] px-4 py-12">
+      <div className="form-container max-w-md w-full animate-scaleIn">
         {success ? (
           <div className="text-center animate-slideIn">
-            <div className="text-6xl mb-6">✅</div>
-            <h1 className="text-3xl font-bold text-success mb-2">
-              Password Reset Successful
-            </h1>
-            <p className="text-text-light mb-6">
-              Your password has been reset. You can now login with your new password.
-            </p>
-            <div className="space-y-2">
-              <p className="text-sm text-text-light">
-                <span className="inline-block animate-bounce mr-2">•</span>
-                <span className="inline-block animate-bounce mr-2">•</span>
-                <span className="inline-block animate-bounce">•</span>
-              </p>
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-success/10 mb-6">
+              <span className="text-4xl">✅</span>
             </div>
+            <h1 className="text-3xl font-bold text-success mb-2">
+              Password Reset!
+            </h1>
+            <p className="text-sm" style={{ color: "var(--color-text-light)" }}>
+              Your password has been reset. Redirecting you to login…
+            </p>
           </div>
         ) : (
           <>
             {/* Header */}
             <div className="text-center mb-8">
-              <div className="text-5xl mb-4">🔑</div>
-              <h1 className="text-3xl font-bold text-primary mb-2">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 dark:bg-secondary/20 mb-4">
+                <span className="text-3xl">🔑</span>
+              </div>
+              <h1 className="text-3xl font-bold mb-1" style={{ color: "var(--color-text-dark)" }}>
                 Create New Password
               </h1>
-              <p className="text-text-light text-sm">
+              <p className="text-sm" style={{ color: "var(--color-text-light)" }}>
                 Enter a strong password for your account
               </p>
             </div>
 
             {/* Error Alert */}
             {error && (
-              <div className="form-error animate-slideIn mb-6">
-                <div className="flex items-start gap-2">
-                  <span className="text-xl">⚠️</span>
-                  <span>{error}</span>
-                </div>
+              <div className="form-error animate-slideIn mb-5 flex items-start gap-2">
+                <span>⚠️</span>
+                <span>{error}</span>
               </div>
             )}
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-4">
               {/* New Password */}
               <div className="form-group">
                 <label className="form-label">New Password</label>
@@ -132,14 +127,14 @@ export default function ResetPassword() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-light hover:text-primary transition"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
                     aria-label="Toggle password visibility"
                   >
                     {showPassword ? "🙈" : "👁️"}
                   </button>
                 </div>
-                <p className="text-xs text-text-light mt-2">
-                  Minimum 6 characters. Use uppercase, numbers, and symbols for strength
+                <p className="text-xs mt-1.5" style={{ color: "var(--color-text-light)" }}>
+                  Minimum 6 characters
                 </p>
               </div>
 
@@ -159,7 +154,7 @@ export default function ResetPassword() {
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-light hover:text-primary transition"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
                     aria-label="Toggle password visibility"
                   >
                     {showConfirmPassword ? "🙈" : "👁️"}
@@ -171,12 +166,12 @@ export default function ResetPassword() {
               <button
                 type="submit"
                 disabled={loading || !newPassword || !confirmPassword}
-                className="btn btn-primary w-full mt-6"
+                className="btn btn-primary w-full mt-2"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
                     <span className="spinner" style={{ width: "16px", height: "16px" }}></span>
-                    Resetting Password...
+                    Resetting Password…
                   </span>
                 ) : (
                   "Reset Password"
@@ -185,11 +180,11 @@ export default function ResetPassword() {
             </form>
 
             {/* Back Link */}
-            <div className="mt-8 pt-6 border-t border-neutral-200 text-center">
-              <p className="text-text-light text-sm">
+            <div className="mt-6 pt-5 border-t text-center" style={{ borderColor: "var(--color-border)" }}>
+              <p className="text-sm" style={{ color: "var(--color-text-light)" }}>
                 <a
                   href="/login"
-                  className="text-secondary font-semibold hover:text-secondary-dark"
+                  className="text-secondary font-semibold hover:text-secondary-dark transition-colors"
                 >
                   Back to login
                 </a>

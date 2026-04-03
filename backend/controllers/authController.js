@@ -11,9 +11,9 @@ const generateToken = (userId) => {
   });
 };
 
-// Generate 8-character alphanumeric OTP
+// Generate 8-character alphanumeric OTP (uppercase + digits to match frontend display)
 const generateOTP = () => {
-  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let otp = "";
   for (let i = 0; i < 8; i++) {
     otp += characters.charAt(Math.floor(Math.random() * characters.length));
@@ -203,8 +203,8 @@ exports.resetPassword = async (req, res) => {
     const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
     const user = await User.findOne({
-      resetToken: hashedToken,
-      resetTokenExpiry: { $gt: Date.now() }
+      verificationToken: hashedToken,
+      verificationTokenExpiry: { $gt: Date.now() }
     });
 
     if (!user) {
@@ -214,8 +214,10 @@ exports.resetPassword = async (req, res) => {
     // Hash new password
     const passwordHash = await bcrypt.hash(newPassword, 10);
 
-    // Update password and clear reset token
+    // Update password and clear all reset/verification tokens
     user.passwordHash = passwordHash;
+    user.verificationToken = null;
+    user.verificationTokenExpiry = null;
     user.resetToken = null;
     user.resetTokenExpiry = null;
     await user.save();

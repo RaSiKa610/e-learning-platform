@@ -43,27 +43,27 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-neutral-50 via-white to-secondary-light/10 px-4">
-      <div className="form-container max-w-md w-full">
+    <div className="min-h-screen flex items-center justify-center bg-[var(--color-bg-light)] px-4 py-12">
+      <div className="form-container max-w-md w-full animate-scaleIn">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="text-5xl mb-4">🚀</div>
-          <h1 className="text-3xl font-bold text-primary mb-2">Get Started</h1>
-          <p className="text-text-light">Create your account to begin learning</p>
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-secondary/10 dark:bg-secondary/20 mb-4">
+            <span className="text-3xl">🚀</span>
+          </div>
+          <h1 className="text-3xl font-bold mb-1" style={{ color: "var(--color-text-dark)" }}>Get Started</h1>
+          <p className="text-sm" style={{ color: "var(--color-text-light)" }}>Create your account to begin learning</p>
         </div>
 
         {/* Error Alert */}
         {error && (
-          <div className="form-error animate-slideIn mb-6">
-            <div className="flex items-start gap-2">
-              <span className="text-xl">⚠️</span>
-              <span>{error}</span>
-            </div>
+          <div className="form-error animate-slideIn mb-5 flex items-start gap-2">
+            <span>⚠️</span>
+            <span>{error}</span>
           </div>
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {/* Name */}
           <div className="form-group">
             <label className="form-label">Full Name</label>
@@ -105,13 +105,13 @@ export default function Signup() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-light hover:text-primary transition"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
                 aria-label="Toggle password visibility"
               >
                 {showPassword ? "🙈" : "👁️"}
               </button>
             </div>
-            <p className="text-xs text-text-light mt-1">Minimum 6 characters</p>
+            <p className="text-xs mt-1" style={{ color: "var(--color-text-light)" }}>Minimum 6 characters</p>
           </div>
 
           {/* Confirm Password */}
@@ -129,7 +129,7 @@ export default function Signup() {
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-light hover:text-primary transition"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
                 aria-label="Toggle password visibility"
               >
                 {showConfirmPassword ? "🙈" : "👁️"}
@@ -141,12 +141,12 @@ export default function Signup() {
           <button
             type="submit"
             disabled={loading}
-            className="btn btn-primary w-full mt-6"
+            className="btn btn-primary w-full mt-2"
           >
             {loading ? (
               <span className="flex items-center gap-2">
                 <span className="spinner" style={{ width: "16px", height: "16px" }}></span>
-                Creating Account...
+                Creating Account…
               </span>
             ) : (
               "Create Account"
@@ -155,12 +155,12 @@ export default function Signup() {
         </form>
 
         {/* Sign In Link */}
-        <div className="mt-8 pt-6 border-t border-neutral-200 text-center">
-          <p className="text-text-light text-sm">
+        <div className="mt-6 pt-5 border-t text-center" style={{ borderColor: "var(--color-border)" }}>
+          <p className="text-sm" style={{ color: "var(--color-text-light)" }}>
             Already have an account?{" "}
             <Link
               to="/login"
-              className="text-secondary font-semibold hover:text-secondary-dark"
+              className="text-secondary font-semibold hover:text-secondary-dark transition-colors"
             >
               Sign in
             </Link>

@@ -97,28 +97,28 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-neutral-50 via-white to-secondary-light/10 px-4">
-      <div className="form-container max-w-md w-full">
+    <div className="min-h-screen flex items-center justify-center bg-[var(--color-bg-light)] px-4 py-12">
+      <div className="form-container max-w-md w-full animate-scaleIn">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="text-5xl mb-4">🔐</div>
-          <h1 className="text-3xl font-bold text-primary mb-2">Reset Password</h1>
-          <p className="text-text-light">We'll help you regain access to your account</p>
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 dark:bg-secondary/20 mb-4">
+            <span className="text-3xl">🔐</span>
+          </div>
+          <h1 className="text-3xl font-bold mb-1" style={{ color: "var(--color-text-dark)" }}>Reset Password</h1>
+          <p className="text-sm" style={{ color: "var(--color-text-light)" }}>We'll help you regain access to your account</p>
         </div>
 
         {/* Error Alert */}
         {error && (
-          <div className="form-error animate-slideIn mb-6">
-            <div className="flex items-start gap-2">
-              <span className="text-xl">⚠️</span>
-              <span>{error}</span>
-            </div>
+          <div className="form-error animate-slideIn mb-5 flex items-start gap-2">
+            <span>⚠️</span>
+            <span>{error}</span>
           </div>
         )}
 
         {/* Step 1: Email Entry */}
         {step === 1 && (
-          <form onSubmit={handleRequestOTP} className="space-y-6">
+          <form onSubmit={handleRequestOTP} className="space-y-5">
             <div className="form-group">
               <label className="form-label">Email Address</label>
               <input
@@ -130,7 +130,7 @@ export default function ForgotPassword() {
                 disabled={loading}
                 className="w-full"
               />
-              <p className="text-xs text-text-light mt-2">
+              <p className="text-xs mt-1.5" style={{ color: "var(--color-text-light)" }}>
                 We'll send a verification code to this email
               </p>
             </div>
@@ -143,19 +143,19 @@ export default function ForgotPassword() {
               {loading ? (
                 <span className="flex items-center gap-2">
                   <span className="spinner" style={{ width: "16px", height: "16px" }}></span>
-                  Sending OTP...
+                  Sending OTP…
                 </span>
               ) : (
                 "Send OTP to Email"
               )}
             </button>
 
-            <div className="pt-4 border-t border-neutral-200 text-center">
-              <p className="text-text-light text-sm">
+            <div className="pt-4 border-t text-center" style={{ borderColor: "var(--color-border)" }}>
+              <p className="text-sm" style={{ color: "var(--color-text-light)" }}>
                 Remember your password?{" "}
                 <a
                   href="/login"
-                  className="text-secondary font-semibold hover:text-secondary-dark"
+                  className="text-secondary font-semibold hover:text-secondary-dark transition-colors"
                 >
                   Sign in
                 </a>
@@ -166,12 +166,12 @@ export default function ForgotPassword() {
 
         {/* Step 2: OTP Verification */}
         {step === 2 && (
-          <form onSubmit={handleVerifyOTP} className="space-y-6">
-            <div className="bg-blue-50 border border-blue-200 rounded-base p-4 text-center">
-              <p className="text-sm text-primary">
-                📧 Verification code sent to{" "}
-                <strong className="block mt-2 font-mono break-all">{email}</strong>
+          <form onSubmit={handleVerifyOTP} className="space-y-5">
+            <div className="rounded-xl p-4 text-center" style={{ backgroundColor: "rgba(24,153,163,0.08)", border: "1px solid rgba(24,153,163,0.25)" }}>
+              <p className="text-sm" style={{ color: "var(--color-text-dark)" }}>
+                📧 Verification code sent to
               </p>
+              <strong className="block mt-1 font-mono text-sm break-all" style={{ color: "var(--color-secondary)" }}>{email}</strong>
             </div>
 
             {/* OTP Input */}
@@ -187,15 +187,15 @@ export default function ForgotPassword() {
                 disabled={loading}
                 className="w-full font-mono text-center text-lg tracking-widest"
               />
-              <p className="text-xs text-text-light mt-2 text-center">
-                Check your email for the code (case-insensitive)
+              <p className="text-xs mt-1.5 text-center" style={{ color: "var(--color-text-light)" }}>
+                Check your email for the code
               </p>
             </div>
 
             {/* Timer */}
             <div className="text-center">
               {timer > 0 ? (
-                <p className="text-sm font-semibold text-primary">
+                <p className="text-sm font-semibold" style={{ color: "var(--color-text-dark)" }}>
                   ⏱️ Code expires in{" "}
                   <span className="font-mono text-secondary">{formatTime(timer)}</span>
                 </p>
@@ -213,7 +213,7 @@ export default function ForgotPassword() {
               {loading ? (
                 <span className="flex items-center gap-2">
                   <span className="spinner" style={{ width: "16px", height: "16px" }}></span>
-                  Verifying...
+                  Verifying…
                 </span>
               ) : (
                 "Verify & Continue"
@@ -225,7 +225,7 @@ export default function ForgotPassword() {
               type="button"
               onClick={handleResendOTP}
               disabled={loading}
-              className="btn btn-ghost w-full"
+              className="btn btn-ghost w-full text-sm"
             >
               Didn't receive code? Resend OTP
             </button>
@@ -238,9 +238,9 @@ export default function ForgotPassword() {
                 setOtp("");
                 setError("");
               }}
-              className="btn btn-outline w-full"
+              className="btn btn-outline w-full text-sm"
             >
-              Back
+              ← Back
             </button>
           </form>
         )}

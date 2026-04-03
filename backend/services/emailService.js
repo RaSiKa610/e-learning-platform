@@ -1,18 +1,59 @@
 const nodemailer = require("nodemailer");
 
-// Configure Gmail SMTP
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD,
-  },
-});
+// Validate required email environment variables
+const EMAIL_USER = process.env.EMAIL_USER;
+const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
+
+const PLACEHOLDER_USER = "your-gmail-address@gmail.com";
+const PLACEHOLDER_PASS = "your-app-specific-password";
+
+const userMissing = !EMAIL_USER || EMAIL_USER === PLACEHOLDER_USER;
+const passMissing = !EMAIL_PASSWORD || EMAIL_PASSWORD === PLACEHOLDER_PASS;
+const credentialsMissing = userMissing || passMissing;
+
+if (userMissing) {
+  console.warn(
+    "⚠️  EMAIL_USER is not configured. Set a real Gmail address in backend/.env"
+  );
+}
+if (passMissing) {
+  console.warn(
+    "⚠️  EMAIL_PASSWORD is not configured. Set a Gmail App Password in backend/.env\n" +
+    "   To generate one: Google Account → Security → 2-Step Verification → App passwords"
+  );
+}
+
+// Configure Gmail SMTP transporter (created only when credentials are present)
+let transporter = null;
+if (!credentialsMissing) {
+  transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: EMAIL_USER,
+      pass: EMAIL_PASSWORD,
+    },
+  });
+}
 
 // Function to send OTP email
 const sendOTPEmail = async (email, otp, userName) => {
+  // Guard: return a clear error if credentials are not configured
+  if (credentialsMissing) {
+    console.error(
+      "❌ Email credentials are not configured. " +
+      "Set EMAIL_USER and EMAIL_PASSWORD (Gmail App Password) in backend/.env"
+    );
+    return {
+      success: false,
+      message:
+        "Email service is not configured. Please contact the administrator.",
+    };
+  }
+
+  // Gmail SMTP requires the authenticated address as the sender.
+  // Using a different domain (e.g. noreply@...) as "from" causes auth errors.
   const mailOptions = {
-    from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+    from: `"E-Learning Platform" <${EMAIL_USER}>`,
     to: email,
     subject: "Password Reset - Verify Your Email",
     html: `
@@ -65,9 +106,19 @@ const sendOTPEmail = async (email, otp, userName) => {
     return { success: true, message: "OTP sent successfully" };
   } catch (error) {
     console.error("Email sending error:", error);
+
+    let friendlyMessage = "Failed to send OTP email, please try again";
+    if (error.code === "EAUTH" || error.responseCode === 535) {
+      friendlyMessage =
+        "Email authentication failed. Ensure EMAIL_USER and EMAIL_PASSWORD " +
+        "(Gmail App Password) are correctly set in backend/.env";
+    } else if (error.code === "ECONNREFUSED" || error.code === "ETIMEDOUT") {
+      friendlyMessage = "Could not connect to email server. Check your network connection.";
+    }
+
     return {
       success: false,
-      message: "Failed to send OTP email, please try again",
+      message: friendlyMessage,
       error: error.message,
     };
   }

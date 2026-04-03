@@ -58,13 +58,13 @@ export default function LoginCalendar() {
   return (
     <div className="card sticky top-24">
       {/* Streak Display */}
-      <div className="text-center mb-8 pb-6 border-b border-neutral-200">
-        <div className="text-5xl mb-3">🔥</div>
-        <h3 className="text-2xl font-bold text-primary mb-2">Login Streak</h3>
-        <div className="text-5xl font-extrabold text-warning mb-2">
+      <div className="text-center mb-6 pb-6" style={{ borderBottom: "1px solid var(--color-border)" }}>
+        <div className="text-5xl mb-2">🔥</div>
+        <h3 className="text-xl font-bold mb-1" style={{ color: "var(--color-text-dark)" }}>Login Streak</h3>
+        <div className="text-5xl font-extrabold text-warning mb-1">
           {user.streak || 0}
         </div>
-        <p className="text-sm text-text-light">
+        <p className="text-sm" style={{ color: "var(--color-text-light)" }}>
           {user.streak === 1 ? "day in a row" : "days in a row"}
         </p>
       </div>
@@ -72,20 +72,22 @@ export default function LoginCalendar() {
       {/* Calendar */}
       <div>
         {/* Month Navigation */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-4">
           <button
             onClick={handlePrevMonth}
-            className="flex items-center justify-center w-8 h-8 rounded-base bg-neutral-100 hover:bg-secondary hover:text-white transition font-bold text-primary"
+            className="flex items-center justify-center w-8 h-8 rounded-base hover:bg-secondary hover:text-white transition-colors font-bold"
+            style={{ backgroundColor: "var(--color-border)", color: "var(--color-text-dark)" }}
             aria-label="Previous month"
           >
             ←
           </button>
-          <h4 className="font-bold text-primary text-center flex-1">
+          <h4 className="font-bold text-center flex-1 text-sm" style={{ color: "var(--color-text-dark)" }}>
             {monthName}
           </h4>
           <button
             onClick={handleNextMonth}
-            className="flex items-center justify-center w-8 h-8 rounded-base bg-neutral-100 hover:bg-secondary hover:text-white transition font-bold text-primary"
+            className="flex items-center justify-center w-8 h-8 rounded-base hover:bg-secondary hover:text-white transition-colors font-bold"
+            style={{ backgroundColor: "var(--color-border)", color: "var(--color-text-dark)" }}
             aria-label="Next month"
           >
             →
@@ -93,11 +95,12 @@ export default function LoginCalendar() {
         </div>
 
         {/* Weekday Headers */}
-        <div className="grid grid-cols-7 gap-1.5 mb-3">
-          {["S", "M", "T", "W", "T", "F", "S"].map((day) => (
+        <div className="grid grid-cols-7 gap-1 mb-2">
+          {["S", "M", "T", "W", "T", "F", "S"].map((day, i) => (
             <div
-              key={day}
-              className="text-center text-xs font-bold text-text-light uppercase tracking-wider"
+              key={i}
+              className="text-center text-xs font-bold uppercase tracking-wider"
+              style={{ color: "var(--color-text-light)" }}
             >
               {day}
             </div>
@@ -105,7 +108,7 @@ export default function LoginCalendar() {
         </div>
 
         {/* Calendar Days */}
-        <div className="grid grid-cols-7 gap-1.5">
+        <div className="grid grid-cols-7 gap-1">
           {days.map((day, idx) => (
             <div
               key={idx}
@@ -113,9 +116,14 @@ export default function LoginCalendar() {
                 day === null
                   ? "bg-transparent"
                   : isDateLogged(day)
-                  ? "bg-success text-white shadow-md font-bold"
-                  : "bg-neutral-100 text-text-light hover:bg-neutral-200"
+                  ? "bg-success text-white shadow-sm font-bold"
+                  : "hover:bg-secondary/10"
               }`}
+              style={
+                day !== null && !isDateLogged(day)
+                  ? { backgroundColor: "var(--color-border)", color: "var(--color-text-light)" }
+                  : {}
+              }
               title={
                 day && isDateLogged(day)
                   ? `Logged in on ${day} ${monthName.split(" ")[0]}`
@@ -129,8 +137,8 @@ export default function LoginCalendar() {
       </div>
 
       {/* Legend */}
-      <div className="mt-6 pt-6 border-t border-neutral-200">
-        <div className="flex items-center gap-2 text-xs text-text-light">
+      <div className="mt-4 pt-4" style={{ borderTop: "1px solid var(--color-border)" }}>
+        <div className="flex items-center gap-2 text-xs" style={{ color: "var(--color-text-light)" }}>
           <div className="w-3 h-3 rounded-sm bg-success"></div>
           <span>Days you logged in</span>
         </div>
@@ -138,20 +146,20 @@ export default function LoginCalendar() {
 
       {/* Motivational Message */}
       {user.streak === 0 ? (
-        <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-base text-center">
-          <p className="text-xs text-primary font-semibold">
-            🎯 Come back tomorrow to start your streak!
+        <div className="mt-3 p-3 rounded-base text-center" style={{ backgroundColor: "rgba(24,153,163,0.08)", border: "1px solid rgba(24,153,163,0.2)" }}>
+          <p className="text-xs font-semibold text-secondary">
+            🎯 Start your streak today!
           </p>
         </div>
       ) : user.streak < 7 ? (
-        <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-base text-center">
-          <p className="text-xs text-warning font-semibold">
+        <div className="mt-3 p-3 rounded-base text-center" style={{ backgroundColor: "rgba(230,126,34,0.08)", border: "1px solid rgba(230,126,34,0.2)" }}>
+          <p className="text-xs font-semibold text-warning">
             🚀 Great job! Keep it up!
           </p>
         </div>
       ) : (
-        <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-base text-center">
-          <p className="text-xs text-success font-semibold">
+        <div className="mt-3 p-3 rounded-base text-center" style={{ backgroundColor: "rgba(39,174,96,0.08)", border: "1px solid rgba(39,174,96,0.2)" }}>
+          <p className="text-xs font-semibold text-success">
             ⭐ Amazing streak! Don't break it!
           </p>
         </div>

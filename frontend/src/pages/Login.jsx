@@ -26,27 +26,27 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-neutral-50 via-white to-secondary-light/10 px-4">
-      <div className="form-container max-w-md w-full">
+    <div className="min-h-screen flex items-center justify-center bg-[var(--color-bg-light)] px-4 py-12">
+      <div className="form-container max-w-md w-full animate-scaleIn">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="text-5xl mb-4">📚</div>
-          <h1 className="text-3xl font-bold text-primary mb-2">Welcome Back</h1>
-          <p className="text-text-light">Sign in to continue learning</p>
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 dark:bg-secondary/20 mb-4">
+            <span className="text-3xl">📚</span>
+          </div>
+          <h1 className="text-3xl font-bold mb-1" style={{ color: "var(--color-text-dark)" }}>Welcome Back</h1>
+          <p className="text-sm" style={{ color: "var(--color-text-light)" }}>Sign in to continue learning</p>
         </div>
 
         {/* Error Alert */}
         {error && (
-          <div className="form-error animate-slideIn mb-6">
-            <div className="flex items-start gap-2">
-              <span className="text-xl">⚠️</span>
-              <span>{error}</span>
-            </div>
+          <div className="form-error animate-slideIn mb-5 flex items-start gap-2">
+            <span>⚠️</span>
+            <span>{error}</span>
           </div>
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-5">
           {/* Email */}
           <div className="form-group">
             <label className="form-label">Email Address</label>
@@ -75,7 +75,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-light hover:text-primary transition"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
                 aria-label="Toggle password visibility"
               >
                 {showPassword ? "🙈" : "👁️"}
@@ -87,12 +87,12 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="btn btn-primary w-full"
+            className="btn btn-primary w-full mt-2"
           >
             {loading ? (
               <span className="flex items-center gap-2">
                 <span className="spinner" style={{ width: "16px", height: "16px" }}></span>
-                Signing in...
+                Signing in…
               </span>
             ) : (
               "Sign In"
@@ -101,22 +101,22 @@ export default function Login() {
         </form>
 
         {/* Links */}
-        <div className="mt-8 space-y-3 text-center">
+        <div className="mt-6 space-y-3 text-center">
           <p className="text-sm">
             <Link
               to="/forgot-password"
-              className="text-secondary font-semibold hover:text-secondary-dark"
+              className="text-secondary font-semibold hover:text-secondary-dark transition-colors"
             >
               Forgot your password?
             </Link>
           </p>
 
-          <div className="pt-4 border-t border-neutral-200">
-            <p className="text-text-light text-sm">
+          <div className="pt-4 border-t" style={{ borderColor: "var(--color-border)" }}>
+            <p className="text-sm" style={{ color: "var(--color-text-light)" }}>
               Don't have an account?{" "}
               <Link
                 to="/signup"
-                className="text-secondary font-semibold hover:text-secondary-dark"
+                className="text-secondary font-semibold hover:text-secondary-dark transition-colors"
               >
                 Create one
               </Link>
